@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="Home" />
+
+    <item
+        android:checkable="true"
+        android:title="Contacts" />
+    <item
+        android:checkable="true"
+        android:title="Companies" />
+    <item
+        android:checkable="true"
+        android:title="Deals" />
+    <item
+        android:checkable="true"
+        android:title="Tasks" />
+    <item
+        android:checkable="true"
+        android:title="Activity Feed" />
+    <item
+        android:checkable="true"
+        android:title="Meetings" />
+    <item
+        android:checkable="true"
+        android:title="Chat" />
+    <item
+        android:checkable="true"
+        android:title="Company" />
+    <item
+        android:checkable="true"
+        android:title="Info" />
+    <item
+        android:checkable="true"
+        android:title="Settings" />
+    <item
+        android:checkable="true"
+        android:title="Chat" />
+    <item
+        android:checkable="true"
+        android:title="Administration" />
+
+
+</menu>

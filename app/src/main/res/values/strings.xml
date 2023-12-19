@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">BusinessHUB</string>
+    <string name="back4app_server_url">https://parseapi.back4app.com/</string>
+    <string name="back4app_app_id">fdofV06uTVB6Ih4oYXEQtXup4NiagaSf0EAyqMtV</string>
+    <string name="back4app_client_key">opSCdOGVkXkzdUfvYB29WLoIoSrWnGwUxUBxRTqb</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
