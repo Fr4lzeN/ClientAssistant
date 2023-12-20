@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/splashScreenFragment"
-        android:name="com.example.businesshub.presentation.SplashScreenFragment"
+        android:name="com.example.businesshub.presentation.authorization.SplashScreenFragment"
         android:label="fragment_splash_screen"
         tools:layout="@layout/fragment_splash_screen" >
         <action
@@ -23,7 +23,7 @@
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.businesshub.presentation.LoginFragment"
+        android:name="com.example.businesshub.presentation.authorization.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
@@ -40,7 +40,7 @@
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/registrationFragment"
-        android:name="com.example.businesshub.presentation.RegistrationFragment"
+        android:name="com.example.businesshub.presentation.authorization.RegistrationFragment"
         android:label="fragment_registration"
         tools:layout="@layout/fragment_registration" >
         <action

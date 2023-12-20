@@ -1,4 +1,4 @@
-package com.example.businesshub.data
+package com.example.businesshub.core
 
 class Constants {
 

@@ -1,6 +1,6 @@
 package com.example.businesshub.data.data_source
 
-import com.example.businesshub.data.Constants
+import com.example.businesshub.core.Constants
 import com.example.businesshub.data.data_source.DTO.GetUserDTO
 import com.example.businesshub.data.data_source.DTO.CurrentUserDTO
 import com.example.businesshub.data.data_source.DTO.SignUpDTO

@@ -1,8 +1,8 @@
-package com.example.businesshub.presentation
+package com.example.businesshub.presentation.authorization
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.businesshub.data.Constants
+import com.example.businesshub.core.Constants
 import com.example.businesshub.data.data_source.DTO.UserDTO
 import com.example.businesshub.domain.model.User
 import com.example.businesshub.domain.repository.UserApiRepository
@@ -17,8 +17,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SignInViewModel @Inject constructor(
-    val userRepository: UserRepository,
-    val userApiRepository: UserApiRepository
+    private val userRepository: UserRepository,
+    private val userApiRepository: UserApiRepository
 ) : ViewModel() {
 
     private val _isSigned: MutableStateFlow<Boolean?> = MutableStateFlow(null)
@@ -32,50 +32,55 @@ class SignInViewModel @Inject constructor(
             val user = userRepository.getLastUser()
             if (user != null) {
                 if (System.currentTimeMillis() - user.lastSignIn <= Constants.reSignTime) {
-                    _userData.update { user }
-                    _isSigned.update { true }
+                    updateState(true, user)
                     return@launch
-                }else{
-                    val response = userApiRepository.signIn(user.username,user.password)
-                    if (response.isSuccessful){
-                        userRepository.updateUser(user)
-                        _userData.update { user }
-                        _isSigned.update { true }
-                        return@launch
-                    }
+                } else {
+                    signIn(user.username, user.password)
+                    return@launch
                 }
             }
-            _isSigned.update { false }
+            updateState(false)
         }
     }
 
-    fun signUp(username: String, password: String, email: String){
+    fun signUp(username: String, password: String, email: String) {
         viewModelScope.launch(Dispatchers.IO) {
             val response = userApiRepository.signUp(UserDTO(username, password, email))
-            if (response.isSuccessful){
-                val user = User(response.body()!!.objectId,username, password, email)
+            if (response.isSuccessful) {
+                val user = User(response.body()!!.objectId, username, password, email)
                 userRepository.insertUser(user)
-                _userData.update { user }
-                _isSigned.update { true }
+                updateState(true, user)
                 return@launch
-            }else{
-                _isSigned.update { false }
+            } else {
+                updateState(false)
             }
         }
     }
 
-    fun signIn(username: String, password: String){
-        viewModelScope.launch {
+    fun signIn(username: String, password: String) {
+        viewModelScope.launch(Dispatchers.IO) {
             val response = userApiRepository.signIn(username, password)
-            if (response.isSuccessful){
-                val user = User(response.body()!!.objectId,username,password,"123")
+            if (response.isSuccessful) {
+                val user = User(response.body()!!.objectId, username, password, "123")
                 userRepository.insertUser(user)
-                _userData.update { user }
-                _isSigned.update { true }
+                updateState(true, user)
                 return@launch
-            }else{
-                _isSigned.update { false }
+            } else {
+                updateState(false)
             }
+        }
+    }
+
+    private fun updateState(isSigned: Boolean, user: User? = null) {
+        if (isSigned) {
+            _userData.update { user }
+        }
+        _isSigned.update { isSigned }
+    }
+
+    fun logOut(user: User) {
+        viewModelScope.launch(Dispatchers.IO){
+            userRepository.deleteUser(user.objectId)
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.example.businesshub.presentation
+package com.example.businesshub.presentation.authorization
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,16 +9,13 @@ import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import android.view.animation.ScaleAnimation
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.Navigation
 import com.example.businesshub.R
 import com.example.businesshub.databinding.FragmentSplashScreenBinding
-import com.parse.ParseUser
-import kotlinx.coroutines.flow.observeOn
-import kotlinx.coroutines.flow.onSubscription
+import com.example.businesshub.domain.model.User
 import kotlinx.coroutines.launch
 
 class SplashScreenFragment : Fragment() {
@@ -32,26 +29,17 @@ class SplashScreenFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSplashScreenBinding.inflate(layoutInflater, container, false)
-
         binding.text.alpha = 0f
         scaleView(binding.stars, 0f, 1f, 1000)
 
         viewLifecycleOwner.lifecycleScope.launch{
-
             repeatOnLifecycle(Lifecycle.State.STARTED){
                 viewModel.isSigned.collect{ isSigned ->
                     if (isSigned==true){
-
-                        viewModel.userData.collect {
-                            val bundle = Bundle()
-                            bundle.putParcelable("user", it)
-                            Navigation.findNavController(binding.root)
-                                .navigate(R.id.action_splashScreenFragment_to_homeFragment, bundle)
-                        }
+                        viewModel.userData.collect { navigateToHome(it!!) }
                     }
                     if (isSigned==false){
-                        Navigation.findNavController(binding.root)
-                            .navigate(R.id.action_splashScreenFragment_to_loginFragment)
+                       navigateToAuthorization()
                     }
                 }
             }
@@ -63,7 +51,6 @@ class SplashScreenFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-
         viewModel.getUser()
     }
 
@@ -105,7 +92,7 @@ class SplashScreenFragment : Fragment() {
             }
 
             override fun onAnimationEnd(animation: Animation?) {
-                //checkUser(getCurrentUser())
+
             }
 
             override fun onAnimationRepeat(animation: Animation?) {
@@ -117,19 +104,16 @@ class SplashScreenFragment : Fragment() {
 
     }
 
-    private fun checkUser(user: ParseUser?) {
-        if (user != null) {
-            Navigation.findNavController(binding.root)
-                .navigate(R.id.action_splashScreenFragment_to_homeFragment)
-        } else {
-            Navigation.findNavController(binding.root)
-                .navigate(R.id.action_splashScreenFragment_to_loginFragment)
-        }
+    private fun navigateToAuthorization(){
+        Navigation.findNavController(binding.root)
+            .navigate(R.id.action_splashScreenFragment_to_loginFragment)
     }
 
-    private fun getCurrentUser(): ParseUser? {
-
-        return ParseUser.getCurrentUser()
+    private fun navigateToHome(user: User){
+        val bundle = Bundle()
+        bundle.putParcelable("user", user)
+        Navigation.findNavController(binding.root)
+            .navigate(R.id.action_splashScreenFragment_to_homeFragment, bundle)
     }
 
     override fun onDestroyView() {
