@@ -2,10 +2,13 @@ package com.example.businesshub.di
 
 import android.app.Application
 import androidx.room.Room
+import com.example.businesshub.data.data_source.CompanyApi
 import com.example.businesshub.data.data_source.UserApi
 import com.example.businesshub.data.data_source.UserDatabase
+import com.example.businesshub.data.repository.CompanyApiRepositoryImpl
 import com.example.businesshub.data.repository.UserApiRepositoryImpl
 import com.example.businesshub.data.repository.UserRepositoryImpl
+import com.example.businesshub.domain.repository.CompanyApiRepository
 import com.example.businesshub.domain.repository.UserApiRepository
 import com.example.businesshub.domain.repository.UserRepository
 import dagger.Module
@@ -42,10 +45,24 @@ object AppModule {
         return Retrofit.Builder().baseUrl(UserApi.BASE_URL).addConverterFactory(GsonConverterFactory.create()).build().create(UserApi::class.java)
     }
 
+
     @Provides
     @Singleton
     fun provideUserApiRepository(userApi: UserApi) : UserApiRepository{
         return UserApiRepositoryImpl(userApi)
     }
+
+    @Provides
+    @Singleton
+    fun provideCompanyApi(): CompanyApi{
+        return Retrofit.Builder().baseUrl(CompanyApi.BASE_URL).addConverterFactory(GsonConverterFactory.create()).build().create(CompanyApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideCompanyApiRepository(companyApi: CompanyApi): CompanyApiRepository{
+        return CompanyApiRepositoryImpl(companyApi)
+    }
+
 
 }

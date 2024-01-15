@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.RecyclerView
 import com.example.businesshub.databinding.FragmentHomeBinding
 import com.example.businesshub.domain.model.User
 import com.example.businesshub.presentation.authorization.SignInViewModel
@@ -27,14 +28,6 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater,container,false)
         val user: User = arguments?.getParcelable("user")!!
         binding.userName.text=user.username
-        binding.bar.setOnClickListener{
-            if (!isOpen){
-                binding.drawer.open()
-            }else{
-                binding.drawer.close()
-            }
-            isOpen = !isOpen
-        }
 
         binding.delete.setOnClickListener{
             viewModel.logOut(user)

@@ -9,7 +9,7 @@ import com.example.businesshub.domain.repository.UserApiRepository
 import retrofit2.Response
 
 class UserApiRepositoryImpl(
-    val userApi: UserApi
+    private val userApi: UserApi
 ):UserApiRepository {
     override suspend fun signUp(user: UserDTO): Response<SignUpDTO> {
         return userApi.signUp(user)

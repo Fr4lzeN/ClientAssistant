@@ -8,22 +8,6 @@
     tools:context=".presentation.HomeFragment">
 
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/bar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="?attr/actionBarSize"
-            app:title="menu"
-            app:titleTextColor="?attr/colorOnPrimary"
-            app:titleCentered="true"
-            app:navigationIcon="@drawable/baseline_menu_24"
-            android:background="?attr/colorPrimary"/>
-
-    </com.google.android.material.appbar.AppBarLayout>
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
@@ -47,18 +31,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
-    <androidx.drawerlayout.widget.DrawerLayout
-        android:id="@+id/drawer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <com.google.android.material.navigation.NavigationView
-            android:id="@+id/navigation"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            app:menu="@menu/navigation_drawer" />
-    </androidx.drawerlayout.widget.DrawerLayout>
 
 
 </LinearLayout>

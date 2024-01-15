@@ -6,4 +6,13 @@ data class CurrentUserDTO(
     val createdAt: String,
     val updatedAt: String,
     val sessionToken: String,
-)
+    val company: Company? = null,
+){
+
+    data class Company(
+        val objectId: String,
+        val __type: String,
+        val className: String,
+    )
+
+}

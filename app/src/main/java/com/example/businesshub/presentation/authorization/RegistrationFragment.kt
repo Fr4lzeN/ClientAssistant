@@ -42,7 +42,9 @@ class RegistrationFragment : Fragment() {
             repeatOnLifecycle(Lifecycle.State.STARTED){
                 viewModel.isSigned.collect{ isSigned->
                     if (isSigned==true){
-                        viewModel.userData.collect{ toHomeFragment(it!!) }
+                        viewModel.userData.collect{
+                            toCompanyCreation(it!!)
+                        }
                     }else{
                         Toast.makeText(this@RegistrationFragment.context,"Ошибка входа",Toast.LENGTH_SHORT).show()
                     }
@@ -51,6 +53,13 @@ class RegistrationFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    private fun toCompanyCreation(user: User) {
+        val bundle = Bundle()
+        bundle.putParcelable("user",user)
+        bundle.putString("token", viewModel.token.value!!)
+        Navigation.findNavController(binding.root).navigate(R.id.action_registrationFragment_to_companyNameFragment, bundle)
     }
 
     override fun onDestroyView() {
@@ -62,14 +71,6 @@ class RegistrationFragment : Fragment() {
         if (password != passwordConfirm) return false
         return true
     }
-
-    private fun toHomeFragment(user: User) {
-        val bundle = Bundle()
-        bundle.putParcelable("user",user)
-        Navigation.findNavController(binding.root)
-            .navigate(R.id.action_registrationFragment_to_homeFragment, bundle)
-    }
-
 
     private  fun getData():Array<String>{
         return arrayOf(

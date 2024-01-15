@@ -1,39 +1,96 @@
 package com.example.businesshub.presentation
 
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentActivity
-import com.example.businesshub.data.data_source.UserApi
-import com.example.businesshub.data.repository.UserRepositoryImpl
+import androidx.fragment.app.Fragment
+import com.example.businesshub.R
 import com.example.businesshub.databinding.ActivityMainBinding
-import com.example.businesshub.domain.model.User
-import com.google.gson.Gson
-import com.parse.ParseCloud
-import com.parse.ParseException
-import com.parse.ParseUser
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import java.net.Socket
-import kotlin.coroutines.coroutineContext
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMainBinding
+    private val binding: ActivityMainBinding by lazy {
+        ActivityMainBinding.inflate(layoutInflater)
+    }
+    var isOpen = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.bar.setOnClickListener{
+            if (!isOpen){
+                binding.drawer.open()
+            }else{
+                binding.drawer.close()
+            }
+            isOpen = !isOpen
+        }
+
+        binding.navigation.setNavigationItemSelectedListener {item->
+            binding.drawer.close()
+            isOpen=false
+            return@setNavigationItemSelectedListener when (item.itemId) {
+                R.id.company -> {
+                    replaceFragment(CompanyFragment())
+                    true
+                }
+
+                R.id.tasks -> {
+                    replaceFragment(TasksFragment())
+                    true
+                }
+
+                R.id.deal -> {
+                    replaceFragment(DealsFragment())
+                    true
+                }
+
+                R.id.clients -> {
+                    replaceFragment(ClientsFragment())
+                    true
+                }
+
+                R.id.meetings -> {
+                    replaceFragment(MeetingsFragment())
+                    true
+                }
+
+                R.id.chat -> {
+                    replaceFragment(ChatFragment())
+                    true
+                }
+
+                R.id.contacts -> {
+                    replaceFragment(ContactsFragment())
+                    true
+                }
+
+                R.id.settings -> {
+                    replaceFragment(SettingsFragment())
+                    true
+                }
+
+                R.id.info -> {
+                    replaceFragment(InfoFragment())
+                    true
+                }
+                else -> {
+                    false
+                }
+            }
+        }
+
     }
 
+    private fun replaceFragment(fragment: Fragment, bundle: Bundle? = null) {
+        val fm = supportFragmentManager
+        while (fm.backStackEntryCount > 1) {
+            fm.popBackStack()
+        }
+        val ft = fm.beginTransaction()
+        fragment.arguments=bundle
+        ft.replace(R.id.nav_host_fragment, fragment).commit()
+    }
 
 }

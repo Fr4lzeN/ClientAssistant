@@ -16,6 +16,7 @@ import androidx.navigation.Navigation
 import com.example.businesshub.R
 import com.example.businesshub.databinding.FragmentSplashScreenBinding
 import com.example.businesshub.domain.model.User
+import com.example.businesshub.presentation.HomeFragment
 import kotlinx.coroutines.launch
 
 class SplashScreenFragment : Fragment() {
@@ -36,7 +37,14 @@ class SplashScreenFragment : Fragment() {
             repeatOnLifecycle(Lifecycle.State.STARTED){
                 viewModel.isSigned.collect{ isSigned ->
                     if (isSigned==true){
-                        viewModel.userData.collect { navigateToHome(it!!) }
+                        viewModel.userData.collect {
+                            if (it!!.companyId!=null){
+                                navigateToHome(it)
+                            }else{
+                                navigateToCompany(it)
+                            }
+
+                        }
                     }
                     if (isSigned==false){
                        navigateToAuthorization()
@@ -47,6 +55,13 @@ class SplashScreenFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    private fun navigateToCompany(user: User) {
+        val bundle = Bundle()
+        bundle.putParcelable("user",user)
+        bundle.putString("token", viewModel.token.value!!)
+        Navigation.findNavController(binding.root).navigate(R.id.action_splashScreenFragment_to_companyNameFragment, bundle)
     }
 
     override fun onStart() {
@@ -113,7 +128,7 @@ class SplashScreenFragment : Fragment() {
         val bundle = Bundle()
         bundle.putParcelable("user", user)
         Navigation.findNavController(binding.root)
-            .navigate(R.id.action_splashScreenFragment_to_homeFragment, bundle)
+            .navigate(R.id.action_splashScreenFragment_to_homeFragment,bundle)
     }
 
     override fun onDestroyView() {

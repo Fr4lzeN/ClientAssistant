@@ -1,6 +1,9 @@
 package com.example.businesshub.presentation.authorization
 
+import android.content.Intent
 import android.os.Bundle
+import android.provider.ContactsContract
+import android.provider.ContactsContract.Contacts
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -50,6 +53,7 @@ class LoginFragment : Fragment() {
             )
         }
 
+
         binding.signInQr.setOnClickListener {
             barcodeLauncher.launch(createOptions())
         }
@@ -62,7 +66,9 @@ class LoginFragment : Fragment() {
             repeatOnLifecycle(Lifecycle.State.STARTED){
                 viewModel.isSigned.collect{ isSigned->
                     if (isSigned==true){
-                        viewModel.userData.collect{ navigateToHome(it!!) }
+                        viewModel.userData.collect{
+                            navigateToHome(it!!) 
+                        }
                     }else{
                         Toast.makeText(this@LoginFragment.context, "Ошибка входа", Toast.LENGTH_SHORT).show()
                     }

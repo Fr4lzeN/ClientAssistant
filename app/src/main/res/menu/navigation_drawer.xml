@@ -1,44 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:title="Home" />
-
     <item
+        android:id="@+id/company"
         android:checkable="true"
-        android:title="Contacts" />
+        android:title="Компания" />
     <item
+        android:id="@+id/tasks"
         android:checkable="true"
-        android:title="Companies" />
+        android:title="Задачи" />
     <item
+        android:id="@+id/deal"
         android:checkable="true"
-        android:title="Deals" />
+        android:title="Сделки" />
     <item
+        android:id="@+id/clients"
         android:checkable="true"
-        android:title="Tasks" />
+        android:title="Клиенты" />
     <item
+        android:id="@+id/meetings"
         android:checkable="true"
-        android:title="Activity Feed" />
+        android:title="Встречи" />
     <item
+        android:id="@+id/chat"
         android:checkable="true"
-        android:title="Meetings" />
+        android:title="Чат" />
     <item
+        android:id="@+id/contacts"
         android:checkable="true"
-        android:title="Chat" />
+        android:title="Контакты" />
     <item
+        android:id="@+id/info"
         android:checkable="true"
-        android:title="Company" />
+        android:title="О себе" />
     <item
+        android:id="@+id/settings"
         android:checkable="true"
-        android:title="Info" />
-    <item
-        android:checkable="true"
-        android:title="Settings" />
-    <item
-        android:checkable="true"
-        android:title="Chat" />
-    <item
-        android:checkable="true"
-        android:title="Administration" />
+        android:title="Настройки" />
 
 
 </menu>

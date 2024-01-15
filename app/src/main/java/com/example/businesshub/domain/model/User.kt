@@ -4,6 +4,9 @@ import android.os.Parcelable
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.businesshub.data.data_source.DTO.CurrentUserDTO
+import com.example.businesshub.data.data_source.DTO.GetUserDTO
+import com.example.businesshub.data.data_source.DTO.SignUpDTO
 import com.example.businesshub.data.data_source.DTO.UserDTO
 import kotlinx.android.parcel.Parcelize
 
@@ -16,13 +19,5 @@ data class User(
     val password: String,
     val email: String,
     val lastSignIn: Long = System.currentTimeMillis(),
-): Parcelable{
-
-
-    fun toUserDTO(): UserDTO{
-        return UserDTO(username,password, email)
-    }
-
-
-}
-
+    var companyId: String? = null,
+): Parcelable

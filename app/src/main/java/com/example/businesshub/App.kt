@@ -6,9 +6,6 @@ import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
 class App: Application() {
-
-    val abc = 10
-
     override fun onCreate() {
         super.onCreate()
         Parse.initialize(
