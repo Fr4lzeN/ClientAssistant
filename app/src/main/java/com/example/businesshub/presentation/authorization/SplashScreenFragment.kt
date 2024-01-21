@@ -23,7 +23,7 @@ class SplashScreenFragment : Fragment() {
 
     private var _binding: FragmentSplashScreenBinding? = null
     private val binding get() = _binding!!
-    private val viewModel : SignInViewModel by activityViewModels()
+    private val viewModel: SignInViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,35 +33,45 @@ class SplashScreenFragment : Fragment() {
         binding.text.alpha = 0f
         scaleView(binding.stars, 0f, 1f, 1000)
 
-        viewLifecycleOwner.lifecycleScope.launch{
-            repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModel.isSigned.collect{ isSigned ->
-                    if (isSigned==true){
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.isSigned.collect { isSigned ->
+                    if (isSigned == true) {
                         viewModel.userData.collect {
-                            if (it!!.companyId!=null){
-                                navigateToHome(it)
-                            }else{
-                                navigateToCompany(it)
+                            if (it!!.personId == null) {
+                                navigateToPerson(it)
+                                return@collect
                             }
-
+                            if (it.companyId == null) {
+                                navigateToCompany(it)
+                                return@collect
+                            }
+                            navigateToHome(it)
                         }
                     }
-                    if (isSigned==false){
-                       navigateToAuthorization()
+                    if (isSigned == false) {
+                        navigateToAuthorization()
                     }
                 }
             }
-
         }
-
         return binding.root
+    }
+
+    private fun navigateToPerson(it: User) {
+        val bundle = Bundle()
+        bundle.putParcelable("user", it)
+        bundle.putString("token", viewModel.token.value!!)
+        Navigation.findNavController(binding.root)
+            .navigate(R.id.action_splashScreenFragment_to_personInfoFragment, bundle)
     }
 
     private fun navigateToCompany(user: User) {
         val bundle = Bundle()
-        bundle.putParcelable("user",user)
+        bundle.putParcelable("user", user)
         bundle.putString("token", viewModel.token.value!!)
-        Navigation.findNavController(binding.root).navigate(R.id.action_splashScreenFragment_to_companyNameFragment, bundle)
+        Navigation.findNavController(binding.root)
+            .navigate(R.id.action_splashScreenFragment_to_companyNameFragment, bundle)
     }
 
     override fun onStart() {
@@ -119,20 +129,20 @@ class SplashScreenFragment : Fragment() {
 
     }
 
-    private fun navigateToAuthorization(){
+    private fun navigateToAuthorization() {
         Navigation.findNavController(binding.root)
             .navigate(R.id.action_splashScreenFragment_to_loginFragment)
     }
 
-    private fun navigateToHome(user: User){
+    private fun navigateToHome(user: User) {
         val bundle = Bundle()
         bundle.putParcelable("user", user)
         Navigation.findNavController(binding.root)
-            .navigate(R.id.action_splashScreenFragment_to_homeFragment,bundle)
+            .navigate(R.id.action_splashScreenFragment_to_homeFragment, bundle)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding=null
+        _binding = null
     }
 }

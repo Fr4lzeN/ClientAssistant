@@ -2,13 +2,17 @@ package com.example.businesshub.di
 
 import android.app.Application
 import androidx.room.Room
+import com.example.businesshub.core.Constants
 import com.example.businesshub.data.data_source.CompanyApi
+import com.example.businesshub.data.data_source.PersonApi
 import com.example.businesshub.data.data_source.UserApi
 import com.example.businesshub.data.data_source.UserDatabase
 import com.example.businesshub.data.repository.CompanyApiRepositoryImpl
+import com.example.businesshub.data.repository.PersonApiRepositoryImpl
 import com.example.businesshub.data.repository.UserApiRepositoryImpl
 import com.example.businesshub.data.repository.UserRepositoryImpl
 import com.example.businesshub.domain.repository.CompanyApiRepository
+import com.example.businesshub.domain.repository.PersonApiRepository
 import com.example.businesshub.domain.repository.UserApiRepository
 import com.example.businesshub.domain.repository.UserRepository
 import dagger.Module
@@ -17,6 +21,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.create
 import javax.inject.Singleton
 
 @Module
@@ -55,13 +60,25 @@ object AppModule {
     @Provides
     @Singleton
     fun provideCompanyApi(): CompanyApi{
-        return Retrofit.Builder().baseUrl(CompanyApi.BASE_URL).addConverterFactory(GsonConverterFactory.create()).build().create(CompanyApi::class.java)
+        return Retrofit.Builder().baseUrl(Constants.BASE_FUNC_URL).addConverterFactory(GsonConverterFactory.create()).build().create(CompanyApi::class.java)
     }
 
     @Provides
     @Singleton
     fun provideCompanyApiRepository(companyApi: CompanyApi): CompanyApiRepository{
         return CompanyApiRepositoryImpl(companyApi)
+    }
+
+    @Provides
+    @Singleton
+    fun providePersonApi(): PersonApi{
+        return Retrofit.Builder().baseUrl(Constants.BASE_FUNC_URL).addConverterFactory(GsonConverterFactory.create()).build().create(PersonApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun providePersonApiRepository(personApi: PersonApi): PersonApiRepository{
+        return PersonApiRepositoryImpl(personApi);
     }
 
 

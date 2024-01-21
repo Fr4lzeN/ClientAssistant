@@ -36,7 +36,7 @@ class LoginFragment : Fragment() {
             Toast.makeText(this@LoginFragment.activity, "Cancelled", Toast.LENGTH_LONG).show()
             return@registerForActivityResult
         }
-        val (username,password) = parseQr(result.contents)
+        val (username, password) = parseQr(result.contents)
         viewModel.signIn(username, password)
     }
 
@@ -63,14 +63,27 @@ class LoginFragment : Fragment() {
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModel.isSigned.collect{ isSigned->
-                    if (isSigned==true){
-                        viewModel.userData.collect{
-                            navigateToHome(it!!) 
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.isSigned.collect { isSigned ->
+                    if (isSigned == true) {
+                        viewModel.userData.collect {
+                            if (it?.personId == null) {
+                                navigateToPerson(it)
+                                return@collect
+                            }
+                            if (it.companyId == null) {
+                                navigateToCompany(it)
+                                return@collect
+                            }
+                            navigateToHome(it)
                         }
-                    }else{
-                        Toast.makeText(this@LoginFragment.context, "Ошибка входа", Toast.LENGTH_SHORT).show()
+                    }
+                    if (isSigned == false) {
+                        Toast.makeText(
+                            this@LoginFragment.context,
+                            "Ошибка входа",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
             }
@@ -79,13 +92,30 @@ class LoginFragment : Fragment() {
         return binding.root
     }
 
-    private fun navigateToHome(user: User) {
+    private fun navigateToCompany(user: User) {
         val bundle = Bundle()
-        bundle.putParcelable("user",user)
+        bundle.putParcelable("user", user)
         Navigation
             .findNavController(binding.root)
-            .navigate(R.id.action_loginFragment_to_homeFragment,bundle)
+            .navigate(R.id.action_loginFragment_to_companyNameFragment, bundle)
     }
+
+    private fun navigateToPerson(user: User?) {
+        val bundle = Bundle()
+        bundle.putParcelable("user", user)
+        Navigation
+            .findNavController(binding.root)
+            .navigate(R.id.action_loginFragment_to_personInfoFragment, bundle)
+    }
+
+    private fun navigateToHome(user: User) {
+        val bundle = Bundle()
+        bundle.putParcelable("user", user)
+        Navigation
+            .findNavController(binding.root)
+            .navigate(R.id.action_loginFragment_to_homeFragment, bundle)
+    }
+
     private fun parseQr(contents: String): Pair<String, String> {
         val (login, password) = contents.split(" ")
         return Pair(login.split(':')[1], password.split(':')[1])

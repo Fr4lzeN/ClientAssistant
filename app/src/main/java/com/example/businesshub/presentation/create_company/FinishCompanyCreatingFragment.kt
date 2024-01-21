@@ -30,9 +30,7 @@ class FinishCompanyCreatingFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentFinishCompanyCreatingBinding.inflate(inflater, container, false)
-
         drawData()
-
 
         binding.finish.setOnClickListener {
             setProgressBar(true)
@@ -45,12 +43,12 @@ class FinishCompanyCreatingFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.result.collect {
-                    if (it == true) {
+                viewModel.result.collect { created ->
+                    if (created == true) {
                         toHomeFragment()
                         return@collect
                     }
-                    if (it == false) {
+                    if (created == false) {
                         Toast.makeText(
                             this@FinishCompanyCreatingFragment.context,
                             "Ошибка создания компании",
@@ -65,7 +63,6 @@ class FinishCompanyCreatingFragment : Fragment() {
     }
 
     private fun toHomeFragment() {
-
         val bundle = Bundle()
         bundle.putParcelable("user", viewModel.user)
         bundle.putString("token", viewModel.token)

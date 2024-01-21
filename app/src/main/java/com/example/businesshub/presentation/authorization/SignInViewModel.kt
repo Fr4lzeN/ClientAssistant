@@ -47,7 +47,7 @@ class SignInViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             val response = userApiRepository.signUp(UserDTO(username, password, email))
             if (response.isSuccessful) {
-                val user = User(response.body()!!.objectId, username, password, email)
+                val user = User(response.body()!!.objectId, username, password)
                 _token.update { response.body()!!.sessionToken }
                 userRepository.insertUser(user)
                 updateState(true, user)
@@ -62,7 +62,13 @@ class SignInViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             val response = userApiRepository.signIn(username, password)
             if (response.isSuccessful) {
-                val user = User(response.body()!!.objectId, username, password, "123", companyId = response.body()!!.company?.objectId)
+                val user = User(
+                    response.body()!!.objectId,
+                    username,
+                    password,
+                    response.body()!!.person?.objectId,
+                    companyId = response.body()!!.company?.objectId
+                )
                 _token.update { response.body()!!.sessionToken }
                 Log.d("company", response.body()!!.sessionToken)
                 userRepository.insertUser(user)

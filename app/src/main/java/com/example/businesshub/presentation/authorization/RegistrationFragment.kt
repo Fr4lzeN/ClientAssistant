@@ -30,23 +30,28 @@ class RegistrationFragment : Fragment() {
         _binding = FragmentRegistrationBinding.inflate(inflater, container, false)
 
         binding.signUp.setOnClickListener {
-            val (id,password,passwordConfirm,email) = getData()
+            val (id, password, passwordConfirm, email) = getData()
             if (!checkPassword(password, passwordConfirm)) {
                 Toast.makeText(this.activity, "Пароли не совпадают", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            viewModel.signUp(id,password,email)
+            viewModel.signUp(id, password, email)
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModel.isSigned.collect{ isSigned->
-                    if (isSigned==true){
-                        viewModel.userData.collect{
-                            toCompanyCreation(it!!)
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.isSigned.collect { isSigned ->
+                    if (isSigned == true) {
+                        viewModel.userData.collect {
+                            navigateToUser(it!!)
                         }
-                    }else{
-                        Toast.makeText(this@RegistrationFragment.context,"Ошибка входа",Toast.LENGTH_SHORT).show()
+                    }
+                    if (isSigned == false) {
+                        Toast.makeText(
+                            this@RegistrationFragment.context,
+                            "Ошибка входа",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
             }
@@ -55,16 +60,17 @@ class RegistrationFragment : Fragment() {
         return binding.root
     }
 
-    private fun toCompanyCreation(user: User) {
+    private fun navigateToUser(user: User) {
         val bundle = Bundle()
-        bundle.putParcelable("user",user)
+        bundle.putParcelable("user", user)
         bundle.putString("token", viewModel.token.value!!)
-        Navigation.findNavController(binding.root).navigate(R.id.action_registrationFragment_to_companyNameFragment, bundle)
+        Navigation.findNavController(binding.root)
+            .navigate(R.id.action_registrationFragment_to_personInfoFragment, bundle)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding=null
+        _binding = null
     }
 
     private fun checkPassword(password: String, passwordConfirm: String): Boolean {
@@ -72,7 +78,7 @@ class RegistrationFragment : Fragment() {
         return true
     }
 
-    private  fun getData():Array<String>{
+    private fun getData(): Array<String> {
         return arrayOf(
             binding.id.text.toString(),
             binding.password.text.toString(),

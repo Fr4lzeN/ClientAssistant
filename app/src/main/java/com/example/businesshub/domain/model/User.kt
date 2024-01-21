@@ -17,7 +17,7 @@ data class User(
     val objectId: String,
     val username: String,
     val password: String,
-    val email: String,
+    var personId: String?=null,
     val lastSignIn: Long = System.currentTimeMillis(),
     var companyId: String? = null,
 ): Parcelable

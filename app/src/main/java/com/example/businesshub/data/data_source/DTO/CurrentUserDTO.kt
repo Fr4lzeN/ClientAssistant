@@ -7,6 +7,7 @@ data class CurrentUserDTO(
     val updatedAt: String,
     val sessionToken: String,
     val company: Company? = null,
+    val person: Person? = null,
 ){
 
     data class Company(
@@ -14,5 +15,11 @@ data class CurrentUserDTO(
         val __type: String,
         val className: String,
     )
+    data class Person(
+        val objectId: String,
+        val __type: String,
+        val className: String,
+    )
+
 
 }

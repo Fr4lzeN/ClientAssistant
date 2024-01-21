@@ -27,7 +27,7 @@ class HomeFragment : Fragment() {
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater,container,false)
         val user: User = arguments?.getParcelable("user")!!
-        binding.userName.text=user.username
+        binding.userName.text="${user.username}, company: ${user.companyId}, person: ${user.personId}"
 
         binding.delete.setOnClickListener{
             viewModel.logOut(user)

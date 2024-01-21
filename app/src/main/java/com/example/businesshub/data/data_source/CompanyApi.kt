@@ -13,9 +13,7 @@ import retrofit2.http.Query
 
 interface CompanyApi {
 
-    companion object{
-        @JvmStatic val BASE_URL: String = "https://parseapi.back4app.com/functions/"
-    }
+
 
     @Headers(
         "X-Parse-Application-Id: ${Constants.applicationId}",

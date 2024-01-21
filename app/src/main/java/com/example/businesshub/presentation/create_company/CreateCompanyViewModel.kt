@@ -89,7 +89,7 @@ class CreateCompanyViewModel @Inject constructor(
             )
             val response = companyApiRepository.createCompany(token!!, company)
             if (response.isSuccessful) {
-                user!!.companyId=response.body()!!.result.objectId
+                user!!.companyId = response.body()!!.result.objectId
                 Log.d("company", response.body()!!.result.objectId)
                 userRepository.updateUser(user!!)
             }
