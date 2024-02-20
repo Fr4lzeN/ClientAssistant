@@ -7,25 +7,29 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.Navigation
+import androidx.navigation.navGraphViewModels
 import com.example.businesshub.R
 import com.example.businesshub.databinding.FragmentCompanyUsrleBinding
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointBackward
 import com.google.android.material.datepicker.MaterialDatePicker
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.util.Calendar
 import java.util.GregorianCalendar
 
+@AndroidEntryPoint
 class CompanyUSRLEFragment : Fragment() {
 
     private var _binding: FragmentCompanyUsrleBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: CreateCompanyViewModel by activityViewModels()
+    private val viewModel: CreateCompanyViewModel by viewModels()
 
 
     override fun onCreateView(
@@ -49,8 +53,7 @@ class CompanyUSRLEFragment : Fragment() {
         }
 
         binding.next.setOnClickListener {
-            Navigation.findNavController(binding.root)
-                .navigate(R.id.action_companyUSRLEFragment_to_finishCompanyCreatingFragment)
+
         }
         binding.back.setOnClickListener {
             Navigation.findNavController(binding.root).popBackStack()
@@ -113,13 +116,13 @@ class CompanyUSRLEFragment : Fragment() {
             return false
         }
         if (inn.length != 10) {
-            binding.inn.error = "Длина ИНН составляет 10 символов"
+            binding.inn.error = resources.getResourceName(R.string.inn_length_error)
             return false
         }
         try {
             inn.toInt()
         } catch (e: NumberFormatException) {
-            binding.inn.error = "ИНН состоит только из цифр"
+            binding.inn.error = resources.getResourceName(R.string.inn_format_error)
             return false
         }
         binding.inn.error = null
@@ -132,13 +135,13 @@ class CompanyUSRLEFragment : Fragment() {
             return false
         }
         if (kpp.length != 9) {
-            binding.kpp.error = "Длина КПП составляет 9 символов"
+            binding.kpp.error = resources.getResourceName(R.string.kpp_length_error)
             return false
         }
         try {
             kpp.toInt()
         } catch (e: NumberFormatException) {
-            binding.kpp.error = "КПП состоит только из цифр"
+            binding.kpp.error = resources.getResourceName(R.string.kpp_format_error)
             return false
         }
         binding.kpp.error = null
@@ -151,13 +154,13 @@ class CompanyUSRLEFragment : Fragment() {
             return false
         }
         if (ogrn.length != 13) {
-            binding.ogrn.error = "Длина ОГРН составляет 13 символов"
+            binding.ogrn.error = resources.getResourceName(R.string.ogrn_length_error)
             return false
         }
         try {
             ogrn.toLong()
         } catch (e: NumberFormatException) {
-            binding.ogrn.error = "ОГРН состоит только из цифр"
+            binding.ogrn.error = resources.getResourceName(R.string.ogrn_format_error)
             return false
         }
         binding.ogrn.error = null

@@ -8,20 +8,33 @@ import com.example.businesshub.data.data_source.PersonApi
 import com.example.businesshub.data.data_source.UserApi
 import com.example.businesshub.data.data_source.UserDatabase
 import com.example.businesshub.data.repository.CompanyApiRepositoryImpl
+import com.example.businesshub.data.repository.FirebaseStorageRepositoryImpl
+import com.example.businesshub.data.repository.FirebaseUserRepositoryImpl
+import com.example.businesshub.data.repository.FirestoreUserRepositoryImpl
 import com.example.businesshub.data.repository.PersonApiRepositoryImpl
+import com.example.businesshub.data.repository.PictureRepositoryImpl
 import com.example.businesshub.data.repository.UserApiRepositoryImpl
 import com.example.businesshub.data.repository.UserRepositoryImpl
 import com.example.businesshub.domain.repository.CompanyApiRepository
+import com.example.businesshub.domain.repository.FirebaseStorageRepository
+import com.example.businesshub.domain.repository.FirebaseUserRepository
+import com.example.businesshub.domain.repository.FirestoreUserRepository
 import com.example.businesshub.domain.repository.PersonApiRepository
+import com.example.businesshub.domain.repository.PictureRepository
 import com.example.businesshub.domain.repository.UserApiRepository
 import com.example.businesshub.domain.repository.UserRepository
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.ktx.storage
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
 import javax.inject.Singleton
 
 @Module
@@ -30,7 +43,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideUserDatabase(app: Application): UserDatabase{
+    fun provideUserDatabase(app: Application): UserDatabase {
         return Room.databaseBuilder(
             app,
             UserDatabase::class.java,
@@ -40,46 +53,74 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideUserRepository(db: UserDatabase): UserRepository{
+    fun provideUserRepository(db: UserDatabase): UserRepository {
         return UserRepositoryImpl(db.userDAO)
     }
 
     @Provides
     @Singleton
-    fun provideUserApi(): UserApi{
-        return Retrofit.Builder().baseUrl(UserApi.BASE_URL).addConverterFactory(GsonConverterFactory.create()).build().create(UserApi::class.java)
+    fun provideUserApi(): UserApi {
+        return Retrofit.Builder().baseUrl(UserApi.BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create()).build().create(UserApi::class.java)
     }
 
 
     @Provides
     @Singleton
-    fun provideUserApiRepository(userApi: UserApi) : UserApiRepository{
+    fun provideUserApiRepository(userApi: UserApi): UserApiRepository {
         return UserApiRepositoryImpl(userApi)
     }
 
     @Provides
     @Singleton
-    fun provideCompanyApi(): CompanyApi{
-        return Retrofit.Builder().baseUrl(Constants.BASE_FUNC_URL).addConverterFactory(GsonConverterFactory.create()).build().create(CompanyApi::class.java)
+    fun provideCompanyApi(): CompanyApi {
+        return Retrofit.Builder().baseUrl(Constants.BASE_FUNC_URL)
+            .addConverterFactory(GsonConverterFactory.create()).build()
+            .create(CompanyApi::class.java)
     }
 
     @Provides
     @Singleton
-    fun provideCompanyApiRepository(companyApi: CompanyApi): CompanyApiRepository{
+    fun provideCompanyApiRepository(companyApi: CompanyApi): CompanyApiRepository {
         return CompanyApiRepositoryImpl(companyApi)
     }
 
     @Provides
     @Singleton
-    fun providePersonApi(): PersonApi{
-        return Retrofit.Builder().baseUrl(Constants.BASE_FUNC_URL).addConverterFactory(GsonConverterFactory.create()).build().create(PersonApi::class.java)
+    fun providePersonApi(): PersonApi {
+        return Retrofit.Builder().baseUrl(Constants.BASE_FUNC_URL)
+            .addConverterFactory(GsonConverterFactory.create()).build()
+            .create(PersonApi::class.java)
     }
 
     @Provides
     @Singleton
-    fun providePersonApiRepository(personApi: PersonApi): PersonApiRepository{
-        return PersonApiRepositoryImpl(personApi);
+    fun providePersonApiRepository(personApi: PersonApi): PersonApiRepository {
+        return PersonApiRepositoryImpl(personApi)
     }
 
+    @Provides
+    @Singleton
+    fun providePictureRepository(): PictureRepository {
+        return PictureRepositoryImpl(FirebaseStorage.getInstance().reference)
+    }
+
+    @Provides
+    @Singleton
+    fun provideFirebaseUserRepository(): FirebaseUserRepository {
+        return FirebaseUserRepositoryImpl(Firebase.auth)
+    }
+
+    @Provides
+    @Singleton
+    fun provideFirestoreUserRepository(): FirestoreUserRepository {
+        return FirestoreUserRepositoryImpl(Firebase.firestore)
+    }
+
+    @Provides
+    @Singleton
+    fun provideFirebaseStorageRepository(): FirebaseStorageRepository{
+        return FirebaseStorageRepositoryImpl(Firebase.storage.reference)
+    }
 
 }

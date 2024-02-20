@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "188143232753",
+    "project_id": "businesshub-9f069",
+    "storage_bucket": "businesshub-9f069.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:188143232753:android:92f18b9ffccbeb0995eb50",
+        "android_client_info": {
+          "package_name": "com.example.businesshub"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKBM0gAj1iPWLLwmaNKGmXxmnp7PE-RtE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

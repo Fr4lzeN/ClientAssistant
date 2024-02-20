@@ -1,4 +1,4 @@
-package com.example.businesshub.presentation.create_person
+package com.example.businesshub.presentation.authorization
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,26 +6,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.doAfterTextChanged
-import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
+import androidx.navigation.navGraphViewModels
 import com.example.businesshub.R
 import com.example.businesshub.databinding.FragmentPersonInfoBinding
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class PersonInfoFragment : Fragment() {
 
-    var _binding: FragmentPersonInfoBinding? = null
+    private var _binding: FragmentPersonInfoBinding? = null
     val binding get() = _binding!!
-    val viewModel: PersonViewModel by activityViewModels()
-
+    private val viewModel: AuthViewModel by navGraphViewModels(R.id.auth_nav_graph_xml)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentPersonInfoBinding.inflate(inflater, container, false)
 
-        viewModel.token = arguments?.getString("token")
-        viewModel.user = arguments?.getParcelable("user")!!
+        fillFields()
 
 
         binding.name.doAfterTextChanged {
@@ -36,29 +35,40 @@ class PersonInfoFragment : Fragment() {
             viewModel.setSurname(it.toString())
             checkFields()
         }
-        binding.email.doAfterTextChanged {
-            viewModel.setEmail(it.toString())
-            checkFields()
-        }
         binding.phone.doAfterTextChanged {
             viewModel.setPhone(it.toString())
             checkFields()
         }
-
         binding.next.setOnClickListener {
-            Navigation.findNavController(binding.root)
-                .navigate(R.id.action_personInfoFragment_to_personPictureFragment)
-        }
+            navigateToPersonPicture()
 
+        }
+        binding.back.setOnClickListener {
+            navigateBack()
+        }
         return binding.root
+    }
+
+    private fun fillFields() {
+        binding.name.setText(viewModel.name.value?:"")
+        binding.surname.setText(viewModel.surname.value?:"")
+        binding.phone.setText(viewModel.phone.value?:"")
+    }
+
+    private fun navigateToPersonPicture() {
+        Navigation.findNavController(binding.root)
+            .navigate(R.id.action_personInfoFragment_to_personPictureFragment)
+    }
+
+    private fun navigateBack() {
+        Navigation.findNavController(binding.root).navigate(R.id.action_personInfoFragment_to_signInFragment)
     }
 
     private fun checkFields() {
         val name = checkName()
         val surname = checkSurname()
-        val email = checkEmail()
         val phone = checkPhone()
-        binding.next.isEnabled = name && surname && email && phone
+        binding.next.isEnabled = name && surname && phone
     }
 
     private fun checkName(): Boolean {
@@ -70,7 +80,7 @@ class PersonInfoFragment : Fragment() {
             binding.name.error = null
             return true
         }
-        binding.name.error = "Имя должно состоять минимум из 2 символов"
+        binding.name.error = resources.getResourceName(R.string.name_length_error)
         return false
     }
 
@@ -83,20 +93,7 @@ class PersonInfoFragment : Fragment() {
             binding.surname.error = null
             return true
         }
-        binding.surname.error = "Фамилия должно состоять минимум из 2 символов"
-        return false
-    }
-
-    private fun checkEmail(): Boolean {
-        val email = binding.email.text.toString()
-        if (email.isEmpty()) {
-            return false
-        }
-        if (Regex("^.+@[a-zA-Z\\d]+.[a-zA-Z]{2,}$").matches(email)) {
-            binding.email.error = null
-            return true
-        }
-        binding.email.error = "Неправильный формат почты"
+        binding.surname.error = resources.getResourceName(R.string.surname_length_error)
         return false
     }
 
@@ -105,11 +102,11 @@ class PersonInfoFragment : Fragment() {
         if (phone.isEmpty()) {
             return false
         }
-        if (Regex("^(\\+7|8)\\d{10}\$\n").matches(phone)) {
+        if (Regex("^(\\+7|8)\\d{10}$").matches(phone)) {
             binding.phone.error = null
             return true
         }
-        binding.phone.error = "Неправильный формат номера телефона"
+        binding.phone.error = resources.getResourceName(R.string.phone_format_error)
         return false
     }
 

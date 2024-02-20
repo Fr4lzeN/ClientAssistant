@@ -6,31 +6,28 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
-import androidx.recyclerview.widget.RecyclerView
 import com.example.businesshub.databinding.FragmentHomeBinding
 import com.example.businesshub.domain.model.User
-import com.example.businesshub.presentation.authorization.SignInViewModel
+import com.example.businesshub.presentation.authorization.AuthViewModel
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 class HomeFragment : Fragment() {
 
     private var _binding:  FragmentHomeBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: SignInViewModel by activityViewModels()
+    private val viewModel: AuthViewModel by activityViewModels()
     var isOpen = false
 
-
-
-    @Suppress("DEPRECATION")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater,container,false)
-        val user: User = arguments?.getParcelable("user")!!
-        binding.userName.text="${user.username}, company: ${user.companyId}, person: ${user.personId}"
+        binding.userName.text = "${Firebase.auth.currentUser?.uid} + ${Firebase.auth.currentUser?.email}"
 
         binding.delete.setOnClickListener{
-            viewModel.logOut(user)
+
         }
 
         return binding.root

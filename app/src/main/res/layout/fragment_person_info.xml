@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.create_person.PersonInfoFragment"
+    tools:context=".presentation.authorization.PersonInfoFragment"
     android:orientation="vertical">
 
     <EditText
@@ -17,11 +17,6 @@
         android:layout_height="wrap_content"
         android:hint="surname"/>
     <EditText
-        android:id="@+id/email"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="email"/>
-    <EditText
         android:id="@+id/phone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -33,5 +28,12 @@
         android:layout_height="wrap_content"
         android:text="next"
         android:enabled="false"/>
+
+    <Button
+        android:id="@+id/back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="back"
+        android:enabled="true"/>
 
 </LinearLayout>

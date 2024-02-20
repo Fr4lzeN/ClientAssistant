@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="login_error">"Ошибка входа"</string>
+    <string name="registration_error">"Ошибка регистарции"</string>
+    <string name="person_error">"Ошибка заполнения личных данных"</string>
+    <string name="company_error">"Ошибка создания компании"</string>
+    <string name="password_error">"Пароли не совпадают"</string>
+    <string name="addres_error">"Слишком короткий адрес"</string>
+    <string name="description_error">"Слишком короткое описание"</string>
+    <string name="company_name_error">"Слишком короткое название"</string>
+    <string name="inn_format_error">"ИНН состоит только из цифр"</string>
+    <string name="inn_length_error">"Длина ИНН составляет 10 символов"</string>
+    <string name="kpp_format_error">"КПП состоит только из цифр"</string>
+    <string name="kpp_length_error">"Длина КПП составляет 9 символов"</string>
+    <string name="ogrn_format_error">"ОГРН состоит только из цифр"</string>
+    <string name="ogrn_length_error">"Длина ОГРН составляет 13 символов"</string>
+    <string name="name_length_error">"Имя должно состоять минимум из 2 символов"</string>
+    <string name="surname_length_error">"Фамилия должно состоять минимум из 2 символов"</string>
+    <string name="email_format_error">"Неправильный формат почты"</string>
+    <string name="phone_format_error">"Неправильный формат номера телефона"</string>
+
+</resources>

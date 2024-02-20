@@ -105,5 +105,9 @@ class CreateCompanyViewModel @Inject constructor(
         this.user = user
     }
 
+    fun clearState() {
+        _result.update { null }
+    }
+
 
 }

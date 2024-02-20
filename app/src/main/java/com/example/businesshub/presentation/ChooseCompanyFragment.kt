@@ -7,8 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.businesshub.R
 import com.example.businesshub.databinding.FragmentChooseCompanyBinding
-import com.example.businesshub.databinding.FragmentRegistrationBinding
-import com.example.businesshub.databinding.FragmentSplashScreenBinding
+
 
 class ChooseCompanyFragment : Fragment() {
     private var _binding: FragmentChooseCompanyBinding? = null

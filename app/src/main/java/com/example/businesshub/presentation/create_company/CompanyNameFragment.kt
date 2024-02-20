@@ -6,18 +6,20 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
+import androidx.navigation.navGraphViewModels
 import com.example.businesshub.R
 import com.example.businesshub.databinding.FragmentCompanyNameBinding
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class CompanyNameFragment : Fragment() {
 
     private var _binding: FragmentCompanyNameBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: CreateCompanyViewModel by activityViewModels()
+    private val viewModel: CreateCompanyViewModel by viewModels()
 
 
     override fun onCreateView(
@@ -49,11 +51,18 @@ class CompanyNameFragment : Fragment() {
         }
 
         binding.next.setOnClickListener {
-            Navigation.findNavController(binding.root)
-                .navigate(R.id.action_companyNameFragment_to_companyUSRLEFragment)
+
+        }
+
+        binding.back.setOnClickListener {
+            navigateBack()
         }
 
         return binding.root
+    }
+
+    private fun navigateBack() {
+        Navigation.findNavController(binding.root).popBackStack()
     }
 
     private fun checkFields() {
@@ -64,7 +73,7 @@ class CompanyNameFragment : Fragment() {
         val addr = binding.adress.text.toString()
         if (addr.length <= 5) {
             if (addr.isNotEmpty()) {
-                binding.adress.error = "Слишком короткий адрес"
+                binding.adress.error =  resources.getResourceName(R.string.addres_error)
             }
             return false
         }
@@ -76,7 +85,7 @@ class CompanyNameFragment : Fragment() {
         val desc = binding.desc.text.toString()
         if (desc.length < 10) {
             if (desc.isNotEmpty()) {
-                binding.desc.error = "Слишком короткое описание"
+                binding.desc.error =  resources.getResourceName(R.string.description_error)
             }
             return false
         }
@@ -88,7 +97,7 @@ class CompanyNameFragment : Fragment() {
         val name = binding.name.text.toString()
         if (name.length < 3) {
             if (name.isNotEmpty()) {
-                binding.name.error = "Слишком короткое имя"
+                binding.name.error =  resources.getResourceName(R.string.company_name_error)
             }
             return false
         }
