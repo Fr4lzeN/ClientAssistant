@@ -19,7 +19,6 @@ import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanIntentResult
 import com.journeyapps.barcodescanner.ScanOptions
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 
@@ -76,7 +75,8 @@ class SignInFragment : Fragment() {
         }
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.authState
+                viewModel.authSharedState
+                    .filterNotNull()
                     .collect {
                         when (it) {
                             AuthState.SUCCESS -> navigateToHome()

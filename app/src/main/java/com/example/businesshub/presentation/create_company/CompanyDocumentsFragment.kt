@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.doAfterTextChanged
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -24,12 +23,12 @@ import java.util.Calendar
 import java.util.GregorianCalendar
 
 @AndroidEntryPoint
-class CompanyUSRLEFragment : Fragment() {
+class CompanyDocumentsFragment : Fragment() {
 
     private var _binding: FragmentCompanyUsrleBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: CreateCompanyViewModel by viewModels()
+    private val viewModel: CompanyCreationViewModel by  navGraphViewModels(R.id.auth_nav_graph_xml)
 
 
     override fun onCreateView(
@@ -38,9 +37,8 @@ class CompanyUSRLEFragment : Fragment() {
     ): View {
         _binding = FragmentCompanyUsrleBinding.inflate(inflater, container, false)
 
-        binding.inn.setText(viewModel.inn.value ?: "")
-        binding.kpp.setText(viewModel.kpp.value ?: "")
-        binding.ogrn.setText(viewModel.ogrn.value ?: "")
+        initFields()
+
 
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -53,7 +51,8 @@ class CompanyUSRLEFragment : Fragment() {
         }
 
         binding.next.setOnClickListener {
-
+            Navigation.findNavController(binding.root)
+                .navigate(R.id.action_companyUSRLEFragment_to_finishCompanyCreatingFragment)
         }
         binding.back.setOnClickListener {
             Navigation.findNavController(binding.root).popBackStack()
@@ -82,6 +81,12 @@ class CompanyUSRLEFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    private fun initFields() {
+        binding.inn.setText(viewModel.inn.value ?: "")
+        binding.kpp.setText(viewModel.kpp.value ?: "")
+        binding.ogrn.setText(viewModel.ogrn.value ?: "")
     }
 
     private fun buildDatePicker() = MaterialDatePicker.Builder

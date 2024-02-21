@@ -19,7 +19,6 @@ import com.example.businesshub.core.AuthState
 import com.example.businesshub.databinding.FragmentPersonPictureBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 
@@ -74,7 +73,8 @@ class PersonPictureFragment : Fragment() {
         }
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.authState
+                viewModel.authSharedState
+                    .filterNotNull()
                     .collect {
                         if (it == AuthState.SUCCESS) {
                             navigateToHome()

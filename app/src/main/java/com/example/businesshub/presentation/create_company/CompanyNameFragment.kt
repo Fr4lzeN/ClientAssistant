@@ -12,6 +12,7 @@ import androidx.navigation.navGraphViewModels
 import com.example.businesshub.R
 import com.example.businesshub.databinding.FragmentCompanyNameBinding
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.internal.lifecycle.DefaultViewModelFactories
 
 @AndroidEntryPoint
 class CompanyNameFragment : Fragment() {
@@ -19,7 +20,9 @@ class CompanyNameFragment : Fragment() {
     private var _binding: FragmentCompanyNameBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: CreateCompanyViewModel by viewModels()
+    private val viewModel: CompanyCreationViewModel by navGraphViewModels(R.id.auth_nav_graph_xml){
+        defaultViewModelProviderFactory
+    }
 
 
     override fun onCreateView(
@@ -28,13 +31,7 @@ class CompanyNameFragment : Fragment() {
     ): View {
         _binding = FragmentCompanyNameBinding.inflate(inflater, container, false)
 
-        viewModel.setToken(arguments?.getString("token"))
-        viewModel.setUser(arguments?.getParcelable("user")!!)
-
-        binding.name.setText(viewModel.name.value ?: "")
-        binding.desc.setText(viewModel.desc.value ?: "")
-        binding.adress.setText(viewModel.addr.value ?: "")
-
+        initFields()
         binding.name.doAfterTextChanged {
             viewModel.setName(it.toString())
             checkFields()
@@ -51,7 +48,7 @@ class CompanyNameFragment : Fragment() {
         }
 
         binding.next.setOnClickListener {
-
+            navigateNext()
         }
 
         binding.back.setOnClickListener {
@@ -59,6 +56,17 @@ class CompanyNameFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    private fun navigateNext() {
+        Navigation.findNavController(binding.root)
+            .navigate(R.id.action_companyNameFragment_to_companyUSRLEFragment)
+    }
+
+    private fun initFields() {
+        binding.name.setText(viewModel.name.value ?: "")
+        binding.desc.setText(viewModel.desc.value ?: "")
+        binding.adress.setText(viewModel.addr.value ?: "")
     }
 
     private fun navigateBack() {
@@ -73,7 +81,7 @@ class CompanyNameFragment : Fragment() {
         val addr = binding.adress.text.toString()
         if (addr.length <= 5) {
             if (addr.isNotEmpty()) {
-                binding.adress.error =  resources.getResourceName(R.string.addres_error)
+                binding.adress.error = resources.getResourceName(R.string.addres_error)
             }
             return false
         }
@@ -85,7 +93,7 @@ class CompanyNameFragment : Fragment() {
         val desc = binding.desc.text.toString()
         if (desc.length < 10) {
             if (desc.isNotEmpty()) {
-                binding.desc.error =  resources.getResourceName(R.string.description_error)
+                binding.desc.error = resources.getResourceName(R.string.description_error)
             }
             return false
         }
@@ -97,7 +105,7 @@ class CompanyNameFragment : Fragment() {
         val name = binding.name.text.toString()
         if (name.length < 3) {
             if (name.isNotEmpty()) {
-                binding.name.error =  resources.getResourceName(R.string.company_name_error)
+                binding.name.error = resources.getResourceName(R.string.company_name_error)
             }
             return false
         }

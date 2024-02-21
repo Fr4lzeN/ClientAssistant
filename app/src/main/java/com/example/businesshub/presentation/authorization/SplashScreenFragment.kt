@@ -57,7 +57,7 @@ class SplashScreenFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-
+        viewModel.getUser()
     }
 
     private fun scaleView(v: View, startScale: Float, endScale: Float, time: Long = 1500) {
@@ -100,7 +100,6 @@ class SplashScreenFragment : Fragment() {
             override fun onAnimationEnd(animation: Animation?) {
                 Log.d("user", "animation end")
                 collectAuthState()
-                viewModel.getUser()
             }
 
             override fun onAnimationRepeat(animation: Animation?) {
@@ -115,6 +114,7 @@ class SplashScreenFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.authState
+                    .filterNotNull()
                     .collect {
                         Log.d("user", it.toString())
                         when (it) {

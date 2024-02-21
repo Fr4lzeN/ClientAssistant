@@ -15,7 +15,6 @@ import com.example.businesshub.R
 import com.example.businesshub.core.AuthState
 import com.example.businesshub.databinding.FragmentSignUpBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 
@@ -55,7 +54,8 @@ class SignUpFragment : Fragment() {
         }
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.authState
+                viewModel.authSharedState
+                    .filterNotNull()
                     .collect {
                         if (it == AuthState.MINIMAL_SUCCESS) {
                             navigateToPerson()

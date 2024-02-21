@@ -1,30 +1,37 @@
 package com.example.businesshub.presentation.create_company
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.Navigation
+import androidx.navigation.navGraphViewModels
+import com.bumptech.glide.Glide
 import com.example.businesshub.R
 import com.example.businesshub.databinding.FragmentFinishCompanyCreatingBinding
-import com.example.businesshub.presentation.HomeFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class FinishCompanyCreatingFragment : Fragment() {
+class CompanyPictureFragment : Fragment() {
 
     private var _binding: FragmentFinishCompanyCreatingBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: CreateCompanyViewModel by viewModels()
+    private val viewModel: CompanyCreationViewModel by  navGraphViewModels(R.id.auth_nav_graph_xml)
+    private val getContent =
+        registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+            viewModel.setPictureUri(uri)
+        }
 
 
     override fun onCreateView(
@@ -32,9 +39,8 @@ class FinishCompanyCreatingFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentFinishCompanyCreatingBinding.inflate(inflater, container, false)
-        drawData()
 
-        binding.finish.setOnClickListener {
+        binding.next.setOnClickListener {
             setProgressBar(true)
             viewModel.createCompany()
         }
@@ -45,17 +51,24 @@ class FinishCompanyCreatingFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.result
+                viewModel.pictureUri
                     .filterNotNull()
-                    .collect { created ->
-                        if (created) {
-                            toHomeFragment()
-                            return@collect
+                    .collect {
+                        Glide.with(binding.image).load(it).into(binding.image)
+                    }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.result
+                    .collect {
+                        if (it) {
+                            navigateToHome()
                         } else {
-                            viewModel.clearState()
                             Toast.makeText(
-                                this@FinishCompanyCreatingFragment.context,
-                                resources.getResourceName(R.string.company_error),
+                                this@CompanyPictureFragment.context,
+                                "Ошибка загрузки, попробуйте еще раз",
                                 Toast.LENGTH_SHORT
                             ).show()
                             setProgressBar(false)
@@ -63,31 +76,18 @@ class FinishCompanyCreatingFragment : Fragment() {
                     }
             }
         }
+
+        binding.pickImage.setOnClickListener {
+            getContent.launch("image/*")
+        }
+
         return binding.root
     }
 
-    private fun toHomeFragment() {
-        val fm = parentFragmentManager
-        while (fm.backStackEntryCount > 1) {
-            fm.popBackStack()
-        }
-        val ft = fm.beginTransaction()
-        val bundle = Bundle()
-        bundle.putParcelable("user", viewModel.user)
-        bundle.putString("token", viewModel.token)
-        val fragment = HomeFragment()
-        fragment.arguments = bundle
-        ft.replace(R.id.nav_host_fragment, fragment).commit()
+    private fun navigateToHome() {
+        Navigation.findNavController(binding.root).navigate(R.id.action_finishCompanyCreatingFragment_to_homeFragment)
     }
 
-    private fun drawData() {
-        binding.name.text = viewModel.name.value
-        binding.desc.text = viewModel.desc.value
-        binding.addr.text = viewModel.addr.value
-        binding.inn.text = viewModel.inn.value
-        binding.kpp.text = viewModel.kpp.value
-        binding.ogrn.text = viewModel.ogrn.value
-    }
 
     private fun setProgressBar(b: Boolean) {
         binding.layout.visibility = if (b) View.GONE else View.VISIBLE

@@ -14,4 +14,11 @@ class FirebaseStorageRepositoryImpl(
     override suspend fun uploadProfilePicture(uid: String, pictureUri: Uri): Deferred<UploadTask.TaskSnapshot> {
         return storage.child("profilePicture").child(uid).putFile(pictureUri).asDeferred()
     }
+
+    override suspend fun uploadCompanyProfilePicture(
+        companyUid: String,
+        pictureUri: Uri
+    ): Deferred<UploadTask.TaskSnapshot> {
+        return storage.child("company").child(companyUid).child("profile").putFile(pictureUri).asDeferred()
+    }
 }

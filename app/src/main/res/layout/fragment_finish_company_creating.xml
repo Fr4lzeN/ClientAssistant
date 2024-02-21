@@ -3,14 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.create_company.FinishCompanyCreatingFragment">
+    tools:context=".presentation.create_company.CompanyPictureFragment">
 
     <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/progress_circular"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/layout"
@@ -18,81 +18,30 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <com.google.android.material.textview.MaterialTextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Основная информация:"/>
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="300dp"
+            android:layout_height="300dp" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/name"
-            android:layout_width="match_parent"
+        <Button
+            android:id="@+id/pick_image"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Название:"/>
+            android:text="ФОто"/>
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/desc"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Деятельность:"/>
-
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/addr"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Адрес:"/>
-
-        <com.google.android.material.textview.MaterialTextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Документы:"/>
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/ogrn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="ОГРН"/>
-
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/inn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="ИНН"/>
-
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/kpp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="КПП"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-        <com.google.android.material.button.MaterialButton
+        <Button
             android:id="@+id/back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Назад"
-            android:layout_weight="1"/>
+            android:text="Назад"/>
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="2"
-            />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/finish"
+        <Button
+            android:id="@+id/next"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Завершить"
-            android:layout_weight="1"/>
-        </LinearLayout>
-
+            android:text="Завершить"/>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
-
-
 
 
 </FrameLayout>

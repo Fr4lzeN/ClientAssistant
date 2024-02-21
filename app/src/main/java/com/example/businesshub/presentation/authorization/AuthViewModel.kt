@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.businesshub.core.AuthState
 import com.example.businesshub.data.data_source.DTO.PersonDTO
-import com.example.businesshub.domain.model.Person
 import com.example.businesshub.domain.repository.FirebaseStorageRepository
 import com.example.businesshub.domain.repository.FirebaseUserRepository
 import com.example.businesshub.domain.repository.FirestoreUserRepository
@@ -19,7 +18,6 @@ import com.google.firebase.firestore.FirebaseFirestoreException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -37,8 +35,9 @@ class AuthViewModel @Inject constructor(
     private val firebaseStorageRepository: FirebaseStorageRepository,
 ) : ViewModel() {
 
-    private val _authState: MutableSharedFlow<AuthState> = MutableSharedFlow()
-    val authState = _authState.asSharedFlow()
+    private val _authState: MutableStateFlow<AuthState?> = MutableStateFlow(null)
+    val authSharedState = _authState.asSharedFlow()
+    val authState = _authState.asStateFlow()
 
     private val _user: MutableStateFlow<FirebaseUser?> = MutableStateFlow(null)
     val user = _user.asStateFlow()
@@ -180,8 +179,11 @@ class AuthViewModel @Inject constructor(
                     Log.d("signUp", "person")
                 }
                 launch(Dispatchers.IO) {
-                    firebaseStorageRepository
-                        .uploadProfilePicture(user.uid, _pictureUri.value!!).await()
+                    _pictureUri.value?.let {
+                        firebaseStorageRepository
+                            .uploadProfilePicture(user.uid, it).await()
+                    }
+
                     Log.d("signUp", "picture")
                 }
             }

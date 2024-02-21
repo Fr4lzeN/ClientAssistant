@@ -10,18 +10,14 @@ import com.example.businesshub.data.data_source.UserDatabase
 import com.example.businesshub.data.repository.CompanyApiRepositoryImpl
 import com.example.businesshub.data.repository.FirebaseStorageRepositoryImpl
 import com.example.businesshub.data.repository.FirebaseUserRepositoryImpl
+import com.example.businesshub.data.repository.FirestoreCompanyRepositoryImpl
 import com.example.businesshub.data.repository.FirestoreUserRepositoryImpl
-import com.example.businesshub.data.repository.PersonApiRepositoryImpl
-import com.example.businesshub.data.repository.PictureRepositoryImpl
-import com.example.businesshub.data.repository.UserApiRepositoryImpl
 import com.example.businesshub.data.repository.UserRepositoryImpl
 import com.example.businesshub.domain.repository.CompanyApiRepository
 import com.example.businesshub.domain.repository.FirebaseStorageRepository
 import com.example.businesshub.domain.repository.FirebaseUserRepository
+import com.example.businesshub.domain.repository.FirestoreCompanyRepository
 import com.example.businesshub.domain.repository.FirestoreUserRepository
-import com.example.businesshub.domain.repository.PersonApiRepository
-import com.example.businesshub.domain.repository.PictureRepository
-import com.example.businesshub.domain.repository.UserApiRepository
 import com.example.businesshub.domain.repository.UserRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -65,11 +61,6 @@ object AppModule {
     }
 
 
-    @Provides
-    @Singleton
-    fun provideUserApiRepository(userApi: UserApi): UserApiRepository {
-        return UserApiRepositoryImpl(userApi)
-    }
 
     @Provides
     @Singleton
@@ -93,17 +84,7 @@ object AppModule {
             .create(PersonApi::class.java)
     }
 
-    @Provides
-    @Singleton
-    fun providePersonApiRepository(personApi: PersonApi): PersonApiRepository {
-        return PersonApiRepositoryImpl(personApi)
-    }
 
-    @Provides
-    @Singleton
-    fun providePictureRepository(): PictureRepository {
-        return PictureRepositoryImpl(FirebaseStorage.getInstance().reference)
-    }
 
     @Provides
     @Singleton
@@ -114,13 +95,19 @@ object AppModule {
     @Provides
     @Singleton
     fun provideFirestoreUserRepository(): FirestoreUserRepository {
-        return FirestoreUserRepositoryImpl(Firebase.firestore)
+        return FirestoreUserRepositoryImpl(Firebase.firestore.collection("users"))
     }
 
     @Provides
     @Singleton
     fun provideFirebaseStorageRepository(): FirebaseStorageRepository{
         return FirebaseStorageRepositoryImpl(Firebase.storage.reference)
+    }
+
+    @Provides
+    @Singleton
+    fun provideFirestoreCompanyRepository():FirestoreCompanyRepository{
+        return FirestoreCompanyRepositoryImpl(Firebase.firestore.collection("company"))
     }
 
 }

@@ -8,4 +8,5 @@ interface FirebaseStorageRepository {
 
     suspend fun uploadProfilePicture(uid:String, pictureUri: Uri): Deferred<UploadTask.TaskSnapshot>
 
+    suspend fun uploadCompanyProfilePicture(uid:String, pictureUri: Uri): Deferred<UploadTask.TaskSnapshot>
 }
